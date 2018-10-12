@@ -15,7 +15,18 @@ app.get("/", (req,res)=> {
 })
 
 app.post("/api/fileanalyse", upload.single('upfile'), (req, res)=>{
-    res.json({"msg":"file will be analyzed"})
+  let fileObj;
+  if (req.file) {
+    fileObj = {
+      filename:req.file.originalname,
+      size: req.file.size
+    }
+    return res.json(fileObj);
+  }
+  else {
+    res.status(400)
+       .json({msg:'No file uploaded'})
+  }
 })
 
 app.listen(process.env.PORT||3000, ()=>{
